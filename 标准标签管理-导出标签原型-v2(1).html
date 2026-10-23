@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>标准标签管理 · 导出标签原型 v2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 Arial,'Microsoft YaHei',sans-serif;color:#333;background:#f0f2f5}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid #dcdfe6;border-radius:4px;padding:8px 15px;background:white;color:#606266}button:hover{border-color:#409eff;color:#409eff}button.primary{background:#3989fa;border-color:#3989fa;color:white}button:disabled{background:#f5f7fa;color:#aaa;border-color:#e4e7ed;cursor:not-allowed}input[type=checkbox]{accent-color:#3989fa;width:15px;height:15px;vertical-align:middle}input[type=text]{border:1px solid #dcdfe6;border-radius:4px;padding:9px 12px;color:#606266;min-width:0}input::placeholder,textarea::placeholder{color:#b8bec6}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #409eff;outline-offset:2px}.app{display:flex;min-height:100vh}aside{width:15.6%;min-width:190px;background:#021728;color:#9daebe;flex-shrink:0}.logo{display:flex;align-items:center;gap:14px;color:white;font-weight:600;font-size:24px;padding:20px 16px 36px}.logo .mark{font-size:36px;line-height:1}.nav{padding:18px 25px;font-size:15px}.nav .arrow{float:right}.sub{background:#00101c;padding-left:48px}.nav.active{background:#3989fa;color:white}.nav.open{color:#eee}main{flex:1;min-width:0}.top{height:70px;background:white;padding:20px 27px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;font-size:18px;color:#777}.crumb{padding:17px 27px;background:white;color:#999}.workspace{padding:18px;display:grid;grid-template-columns:minmax(315px,27%) 1fr;gap:8px;height:calc(100vh - 130px);min-height:680px}.panel{background:white;border-radius:10px;box-shadow:0 2px 8px #00000008;overflow:hidden}.left{display:flex;flex-direction:column}.controls{padding:19px 18px 14px;border-bottom:1px solid #ebeef5}h2{font-size:18px;margin:0 0 13px;font-weight:600}.search{width:100%;margin-bottom:12px}.actions{display:flex;gap:8px}.actions .primary{flex:1;white-space:nowrap}.actions .export{color:#3989fa;border-color:#9ac5ff;white-space:nowrap;padding:8px 12px}.tree{overflow:auto;padding:15px 14px;flex:1}.tree-row{display:flex;align-items:center;gap:7px;min-height:46px;border-radius:4px;white-space:nowrap;cursor:pointer;padding:4px 4px}.tree-row:hover{background:#f5f7fa}.tree-row.selected{background:#ecf5ff;color:#3989fa}.tree-root{font-weight:600}.en{color:#929dad;font-size:12px;font-weight:400}.slash{color:#ccd1d8;margin:0 3px}.branch{margin-left:9px;padding-left:15px;border-left:1px solid #e2e2e2}.leaf{margin-left:7px;padding-left:15px;border-left:1px solid #e2e2e2}.icon{color:#909399}.enabled{font-size:11px;color:#67c23a;border:1px solid #c2e7b0;background:#f0f9eb;padding:2px 6px;border-radius:3px;margin-right:4px}.enabled.off{color:#909399;border-color:#e4e7ed;background:#f5f7fa}.right{display:flex;flex-direction:column}.panel-title{padding:18px 24px;border-bottom:1px solid #ebeef5;font-size:18px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:12px}.detail{flex:1;display:flex;align-items:center;justify-content:center;overflow:auto}.empty{text-align:center;color:#c4c4c4}.empty-icon{font-size:50px;color:#ddd;margin-bottom:8px}.node-form{align-self:flex-start;width:min(720px,100%);padding:24px 28px}.field{display:flex;align-items:center;gap:20px;margin:0 0 22px}.field>span:first-child{width:90px;color:#666}.field input{flex:1}.node-form .subtle{color:#999;font-size:12px;margin-top:22px}dialog{width:min(560px,calc(100% - 32px));padding:0;border:0;border-radius:9px;box-shadow:0 15px 60px #0003;color:#333}dialog::backdrop{background:#0006}.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:19px 24px;border-bottom:1px solid #eee;font-size:18px}.close{border:0;font-size:24px;padding:0 4px;line-height:1;color:#999}.dialog-body{padding:20px 24px}.hint{font-size:13px;color:#909399;margin-bottom:18px}.select-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f5f7fa;border:1px solid #ebeef5;border-radius:4px 4px 0 0}.select-head label{display:flex;gap:8px;align-items:center}.count{font-size:12px;color:#3989fa}.choices{display:grid;grid-template-columns:1fr 1fr;border:1px solid #ebeef5;border-top:0;padding:10px 12px;gap:3px 10px;max-height:330px;overflow:auto}.choice{display:flex;align-items:center;gap:8px;padding:9px 0;font-size:13px;cursor:pointer}.choice small{color:#929dad;font-size:11px}.export-info{font-size:12px;color:#909399;margin-top:16px}.dialog-foot{border-top:1px solid #eee;padding:15px 24px;display:flex;justify-content:flex-end;gap:10px}.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 22px;background:#f0f9eb;border:1px solid #c2e7b0;border-radius:5px;color:#529b2e;box-shadow:0 4px 20px #0001;z-index:10}.toast[hidden]{display:none}@media(min-width:1800px){body{font-size:16px}.top{height:80px}.workspace{height:calc(100vh - 140px)}.tree-row{min-height:54px}.nav{padding-top:20px;padding-bottom:20px}.en{font-size:14px}.logo{font-size:28px}.controls{padding-top:22px}}@media(max-width:1000px){aside{min-width:165px}.nav{padding-left:18px}.sub{padding-left:30px}.logo{font-size:19px;gap:8px}.workspace{grid-template-columns:315px minmax(280px,1fr);overflow:auto}.actions button{font-size:13px}.en{font-size:11px}}@media(max-width:650px){aside{display:none}.workspace{display:flex;flex-direction:column;height:auto;min-height:0;padding:10px}.left{max-height:650px}.right{min-height:300px}.detail{min-height:220px}.choices{grid-template-columns:1fr 1fr}.choice{flex-wrap:wrap}.top{height:55px}}
+</style>
+<style>
+.tree details summary{cursor:pointer;min-height:44px;padding:10px 2px;white-space:nowrap;color:#606266}.tree>details>summary{font-weight:600;color:#303133}.hierarchy-branch{margin-left:9px;padding-left:13px;border-left:1px solid #e2e2e2}.tree-entry{display:flex;align-items:center;gap:6px;min-height:46px;border:0;padding:7px 4px;white-space:nowrap;background:transparent;text-align:left;width:max-content;min-width:100%;font-size:14px}.tree-entry.selected{background:#ecf5ff;color:#3989fa}.tree-entry .en{font-size:12px}.tree-entry .enabled{flex-shrink:0}.folder-name .en{font-size:12px}.tree{overflow:auto}.tree summary:focus-visible{outline:2px solid #409eff}.hierarchical-choices{max-height:300px;overflow:auto;border:1px solid #ebeef5;border-top:0;padding:8px 12px}.hierarchical-choices summary{padding:10px 0;cursor:pointer}.hierarchical-choices label{display:inline-flex;gap:8px;align-items:center;cursor:pointer;vertical-align:middle}.hierarchical-choices label.off{color:#b8bec6;cursor:not-allowed}.hierarchical-choices summary small{color:#999;margin-left:8px}.export-branch{padding-left:20px;margin-left:6px;border-left:1px solid #eee}.export-leaf{padding:8px 0}.hierarchical-choices .en{white-space:normal}.hierarchical-choices>details{border-bottom:1px solid #eee}#export-dialog{width:min(920px,calc(100% - 32px))}.field>span:last-child{overflow-wrap:anywhere}.field>span:first-child{flex-shrink:0}
+/* ===== 节点配置表单 ===== */
+.panel-title .link-btn{border:1px solid #c6e2ff;background:#ecf5ff;color:#3989fa;padding:4px 13px;font-size:13px;border-radius:3px;font-weight:400}
+.panel-title .link-btn:disabled{border-color:#e4e7ed;background:#f5f7fa;color:#bbb}
+.detail.has-node{align-items:stretch;justify-content:flex-start;display:block;padding:0}
+.node-config{max-width:760px;padding:22px 28px 0}
+.fitem{margin-bottom:18px}
+.flabel{display:block;font-size:13px;color:#606266;margin-bottom:8px}
+.flabel i{color:#f56c6c;font-style:normal;margin-right:3px}
+.node-config input[type=text],.node-config select,.node-config textarea{width:100%;border:1px solid #dcdfe6;border-radius:4px;padding:9px 12px;color:#303133;background:#fff;transition:border-color .15s}
+.node-config input[type=text]:focus,.node-config select:focus,.node-config textarea:focus{border-color:#3989fa;outline:0}
+.node-config input:disabled,.node-config select:disabled,.node-config textarea:disabled{background:#f5f7fa;color:#a8abb2;cursor:not-allowed;border-color:#e4e7ed}
+.node-config textarea{min-height:92px;resize:vertical;line-height:1.6}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.section-title{margin:6px 0 18px;padding-top:16px;border-top:1px dashed #ebeef5;font-size:12px;color:#909399;letter-spacing:.3px}
+.switch{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;color:#606266;user-select:none}
+.switch input{position:absolute;opacity:0;width:0;height:0}
+.switch .track{width:40px;height:20px;border-radius:10px;background:#dcdfe6;position:relative;transition:background .2s;flex-shrink:0}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:left .2s}
+.switch input:checked+.track{background:#3989fa}
+.switch input:checked+.track::after{left:22px}
+.switch input:disabled+.track{opacity:.55}
+.switch input:disabled~.switch-text{color:#b8bec6}
+.form-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #ebeef5;padding:14px 0 16px;display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.form-foot button{min-width:88px}
+/* ===== 导出弹窗补充 ===== */
+.fmt-row{display:flex;align-items:center;gap:18px;margin-top:16px;font-size:13px;color:#606266}
+.fmt-row>span:first-child{color:#909399}
+.fmt-row label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.preview-wrap{margin-top:14px;border:1px solid #ebeef5;border-radius:4px;overflow:auto;max-height:230px}
+table.preview{border-collapse:collapse;font-size:11.5px;width:100%;min-width:800px}
+table.preview th{background:#4f81bd;color:#fff;font-weight:600;text-align:left;padding:6px 8px;line-height:1.35;border:1px solid #4472a8;white-space:nowrap}
+table.preview td{padding:6px 7px;border:1px solid #e6eaf0;color:#606266;vertical-align:top;line-height:1.45;word-break:break-word}
+table.preview tr:nth-child(even) td{background:#fafbfd}
+.preview-empty{padding:16px;font-size:12px;color:#b8bec6}
+</style></head>
+<body><div class="app"><aside><div class="logo"><span class="mark">⋀⋀</span>海外媒资</div><div class="nav">◴　Dashboard</div><div class="nav">♧　推荐管理<span class="arrow">⌄</span></div><div class="nav">▣　媒资管理<span class="arrow">⌄</span></div><div class="nav open">♢　标签管理<span class="arrow">⌃</span></div><div class="nav sub">♢　原始标签管理</div><div class="nav sub">▤　国家分众标签管理</div><div class="nav sub active">♧　标准标签管理</div><div class="nav sub">▣　AI智能打标台</div><div class="nav">▥　数据管理<span class="arrow">⌄</span></div><div class="nav">♧　Feed管理<span class="arrow">⌄</span></div><div class="nav">▧　搜索管理</div></aside><main><header class="top"><span>☰</span><span>⌂　文博</span></header><div class="crumb">首页 / 标签管理 / <span style="color:#606266">标准标签管理</span></div><div class="workspace"><section class="panel left"><div class="controls"><h2>标签管理</h2><input id="search" class="search" type="text" aria-label="搜索标签" placeholder="⌕ 输入标签名称搜索..."><div class="actions"><button class="primary" id="create">＋ 新建一级维度</button><button class="export" id="export">⇩ 导出标签</button></div></div><div class="tree" id="tree-host"></div></section><section class="panel right"><div class="panel-title"><span>节点配置</span><button class="link-btn" id="edit-btn" disabled>编辑</button></div><div class="detail" id="detail"><div class="empty"><div class="empty-icon">▱</div>请在左侧选中一个节点或点击新建</div></div></section></div></main></div>
+<dialog id="export-dialog" aria-labelledby="export-title"><div class="dialog-head"><span id="export-title">导出标签</span><button class="close" aria-label="关闭" data-close>×</button></div><div class="dialog-body"><div class="hint" id="export-hint">勾选父类型可选择全部下级标签；展开后可单独选择子类型或标签。</div><div class="select-head"><label><input type="checkbox" id="select-all">全选所有标签</label><span class="count" id="count" aria-live="polite">已选 0 项</span></div><div class="choices hierarchical-choices" id="choices"></div><div class="fmt-row"><span>导出格式</span><label><input type="radio" name="fmt" value="xlsx" checked>Excel（.xlsx）</label><label><input type="radio" name="fmt" value="csv">CSV</label></div><div class="preview-wrap" id="preview-wrap"></div></div><div class="dialog-foot"><button data-close>取消</button><button class="primary" id="download" disabled>导出所选标签</button></div></dialog><div class="toast" id="toast" role="status" hidden></div>
+<script>(()=>{'use strict';
+/* ===== 数据：zh~en~defEn~defZh~ex，多标签用 | 分隔 ===== */
+const G=(zh,en,code,pri,list)=>({zh,en,code,pri,items:list.split('|').map(s=>{const a=s.trim().split('~').map(x=>x.trim());return {zh:a[0]||'',en:a[1]||'',defEn:a[2]||'',defZh:a[3]||'',ex:a[4]||''};}).filter(x=>x.zh)});
+const roots=[
+{zh:'类型',en:'Genre',groups:[
+G('类型','Genre Type','Type','P0',`
+动作~Action~High-energy physical action and stunts drive the narrative~以高强度动作场面与特技推动叙事~John Wick, Mission: Impossible|
+喜剧~Comedy~Humor as the primary tone and intent~以幽默为主要基调和表达目的~The Grand Budapest Hotel, Friends|
+剧情~Drama~Character-driven serious narrative~以人物刻画为核心的严肃叙事~The Shawshank Redemption, Manchester by the Sea|
+恐怖~Horror~Designed to evoke fear, dread or disgust~以引发恐惧、不安或厌恶为创作目的~Hereditary, The Conjuring|
+惊悚~Thriller~Suspense and tension as the primary emotional driver~以持续悬念与紧张感为核心情绪驱动~Se7en, Gone Girl|
+科幻~Sci-Fi~Speculative science and technology as the premise~以科学幻想或未来科技为设定前提~Interstellar, Blade Runner 2049|
+奇幻~Fantasy~Magic, mythical creatures, or supernatural worlds~以魔法、神话生物或超自然世界为设定~The Lord of the Rings|
+爱情~Romance~Romantic relationship as central storyline~以恋爱关系为核心故事线~The Notebook, Titanic|
+犯罪~Crime~Criminal activity or investigation as core narrative~以犯罪活动或调查为核心叙事~The Godfather, Breaking Bad|
+悬疑~Mystery~Puzzle-solving or uncovering hidden truth drives the plot~以解谜或揭露隐藏真相推动剧情~Knives Out, Sherlock|
+动画~Animation~Primary medium is animation (2D, 3D, stop-motion)~以动画为主要表现形式~Spirited Away, Coco|
+纪录片~Documentary~Non-fiction; documents real events, people, or topics~非虚构；记录真实事件、人物或议题~Planet Earth, Free Solo|
+战争~War~Armed conflict as primary setting and theme~以武装冲突为主要背景和主题~Saving Private Ryan, 1917|
+西部~Western~American frontier setting with genre conventions~以美国西部拓荒为背景的类型片~The Good, the Bad and the Ugly|
+歌舞~Musical~Songs and dance integral to storytelling~歌曲和舞蹈是叙事的核心组成部分~La La Land, Hamilton|
+传记~Biography~Dramatized account of a real person's life~对真实人物生平的戏剧化呈现~Bohemian Rhapsody, Oppenheimer
+`),
+G('子类型','Subgenre','Subgenre','P1',`
+动作冒险~Action-Adventure~Action combined with exploration or quest~动作与探索或冒险任务的结合~Indiana Jones, Jurassic Park|
+浪漫喜剧~Romantic Comedy~Romance driven by comedic situations~以喜剧情境推动的爱情故事~Crazy Rich Asians, Notting Hill|
+黑色喜剧~Dark Comedy~Humor derived from morbid or taboo subjects~从病态或禁忌话题中提炼幽默~Parasite, Fargo|
+心理惊悚~Psychological Thriller~Tension from mental/emotional manipulation~通过心理或情感操控制造紧张感~Black Swan, Shutter Island|
+犯罪惊悚~Crime Thriller~Crime narrative driven by sustained suspense~以持续悬念推动的犯罪叙事~No Country for Old Men, Sicario|
+动作喜剧~Action Comedy~Action sequences combined with comedic tone~动作场面与喜剧基调的结合~Rush Hour, Bad Boys|
+恐怖喜剧~Horror Comedy~Horror elements played for laughs~以搞笑方式呈现恐怖元素~Shaun of the Dead, Zombieland|
+爱情剧情~Romantic Drama~Romance with emphasis on emotional depth~以情感深度为重的爱情故事~Atonement, Blue Valentine|
+科幻恐怖~Sci-Fi Horror~Science fiction setting with horror elements~科幻设定下的恐怖元素~Alien, Event Horizon|
+科幻动作~Sci-Fi Action~Science fiction with action-driven plot~以动作推动的科幻叙事~The Matrix, Edge of Tomorrow|
+奇幻冒险~Fantasy Adventure~Fantasy world with quest/exploration narrative~奇幻世界中的探索与冒险~The Lord of the Rings, Narnia|
+历史剧情~Historical Drama~Drama set in a specific historical period~以特定历史时期为背景的剧情片~Downton Abbey, The Crown|
+家庭剧情~Family Drama~Family relationships as core dramatic tension~以家庭关系为核心戏剧张力~Little Miss Sunshine, Encanto|
+超自然恐怖~Supernatural Horror~Horror driven by paranormal/supernatural forces~以超自然力量驱动的恐怖~The Conjuring, Insidious|
+青春剧情~Teen Drama~Adolescent experiences as central narrative~以青少年经历为核心叙事~Euphoria, Perks of Being a Wallflower|
+政治惊悚~Political Thriller~Political power and intrigue drive suspense~以政治权力和阴谋制造悬念~All the President's Men, Vice|
+体育剧情~Sports Drama~Athletic competition as the narrative backbone~以体育竞技为叙事主线~Rocky, Moneyball|
+战争剧情~War Drama~Human cost of war explored through personal stories~借个人命运呈现战争代价~Dunkirk, The Pianist|
+信仰剧情~Faith Drama~Spiritual belief and doubt as core conflict~以信仰与怀疑的冲突为核心~Silence, The Chosen|
+音乐剧情~Music Drama~Music creation and performance as narrative core~以音乐创作与表演推动叙事~Whiplash, A Star Is Born|
+丧尸喜剧~Zombie Comedy~Zombie survival played with comedic tone~以喜剧手法演绎丧尸生存~Zombieland, Warm Bodies|
+间谍惊悚~Spy Thriller~Espionage operations and betrayal drive the plot~以谍报行动与背叛推动剧情~Tinker Tailor Soldier Spy, The Bourne Identity|
+法律惊悚~Legal Thriller~Courtroom conflict and legal stakes drive suspense~以法庭博弈与法律风险制造悬念~A Time to Kill, The Lincoln Lawyer|
+情色惊悚~Erotic Thriller~Desire and manipulation intertwined with danger~以欲望与操控交织危险氛围~Basic Instinct, Fatal Attraction|
+功夫动作~Martial Arts Action~Martial arts combat as the primary spectacle~以武术格斗为主要看点的动作片~Enter the Dragon, Ip Man|
+新黑色电影~Neo-Noir~Cynical crime stories with stylized moral ambiguity~风格化的犯罪故事与道德灰色地带~Blade Runner 2049, Nightcrawler|
+砍杀片~Slasher~Serial killer stalking and killing victims~以连环杀手追杀受害者为模式~Halloween, Scream|
+灾难片~Disaster Film~Catastrophic events threaten mass survival~以大规模灾难威胁生存为主线~2012, The Day After Tomorrow|
+医疗剧~Medical Drama~Medical crises and ethics inside hospital settings~以医院急救与医疗伦理为核心~Grey's Anatomy, House
+`)]},
+{zh:'题材与主题',en:'Theme & Subject',groups:[
+G('情节主题','Topic','Topic','P1',`
+复仇~Revenge~Protagonist pursues vengeance as primary motivation~以主角复仇为叙事驱动~John Wick, Oldboy|
+生存~Survival~Characters fight to stay alive against hostile conditions~角色在极端环境中求生~The Revenant, Cast Away|
+盗窃/抢劫~Heist~Coordinated theft or robbery as the plot engine~以团队策划实施盗抢推动剧情~Ocean's Eleven, Money Heist|
+成长~Coming-of-Age~Transition from youth to adulthood as core arc~以少年向成年的转变为成长主线~The Perks of Being a Wallflower, Lady Bird|
+逆袭~Underdog~Disadvantaged protagonist defeats stronger rivals~弱势主角战胜强敌的逆袭故事~Rocky, Slumdog Millionaire|
+背叛~Betrayal~Trust broken within key relationships drives conflict~以关键关系中的背叛推动冲突~The Departed, The Godfather Part II|
+救赎~Redemption~Character seeks to atone for past wrongdoing~角色为过往过错寻求救赎~Les Misérables, The Shawshank Redemption|
+阴谋~Conspiracy~Hidden coordinated plot uncovered by the protagonist~主角逐步揭开隐藏的共谋~The Manchurian Candidate, Spotlight|
+时间旅行~Time Travel~Travel across time as a structural device~以穿越时间作为叙事结构手段~Back to the Future, Dark|
+反乌托邦~Dystopia~Oppressive future society as the setting~以压迫性的未来社会为设定~The Hunger Games, Blade Runner 2049
+`),
+G('元素/母题','Element','Element','P1',`
+超级英雄~Superhero~Costumed or super-powered figures fight larger threats~超能力者对抗重大威胁~The Dark Knight, Spider-Man|
+丧尸~Zombie~Undead outbreaks threaten the living~丧尸疫情威胁幸存者~The Walking Dead, World War Z|
+吸血鬼~Vampire~Blood-drinking immortal beings as central figures~以吸血永生者为关键角色~Interview with the Vampire, Twilight|
+外星人~Alien~Extraterrestrial contact as the core premise~以外星接触为设定核心~Arrival, E.T.|
+灵异~Ghost~Spirits or hauntings affect the living~以鬼魂或闹鬼事件影响生者~The Sixth Sense, The Others|
+超自然~Supernatural~Forces beyond natural law shape events~超越自然法则的力量主导事件~Supernatural, The X-Files|
+连环杀手~Serial Killer~A repeat murderer drives the investigation~以连环凶手与追捕为主线~Mindhunter, Zodiac|
+武术/功夫~Martial Arts~Martial arts combat showcased as core appeal~以武术打斗为核心看点~Ip Man, Crouching Tiger Hidden Dragon|
+谍战/间谍~Espionage~Undercover intelligence operations as narrative core~以卧底与情报行动为核心~The Bourne Identity, Homeland|
+黑帮~Gangster / Mafia~Organized crime groups and their power struggles~以黑帮组织与权力斗争为主题~The Godfather, Narcos|
+体育~Sports~Competitive sport as the central arena~以体育竞技为核心舞台~Rocky, Ted Lasso|
+毒品~Drugs / Narcotics~Drug trade or addiction as central subject~以毒品交易或成瘾为核心议题~Breaking Bad, Narcos|
+法律/法庭~Legal / Courtroom~Legal proceedings as the dramatic stage~以司法审理为戏剧舞台~A Few Good Men, Suits|
+军事~Military~Military operations and soldier experience~以军事行动与军人经历为核心~Band of Brothers, Lone Survivor|
+音乐/音乐人~Music / Musicians~Music making and artist life as subject~以音乐创作与音乐人生活为主题~A Star Is Born, Bohemian Rhapsody|
+监狱~Prison~Prison life and incarceration as setting~以监狱生活与服刑为背景~Oz, The Shawshank Redemption|
+囚禁~Incarceration~Captivity and confinement drive the narrative~以囚禁与限制自由推动剧情~Room, Prisoners|
+腐败/权力滥用~Corruption / Power Abuse~Abuse of power and corruption expose a system~揭发权力滥用与系统性腐败~The Wire, Spotlight|
+改编自书籍/小说~Based on Book / Novel~Adapted from a published book or novel~改编自已出版的书籍或小说~The Lord of the Rings, Gone Girl
+`),
+G('社会议题','Social','Social','P1',`
+种族与身份~Race & Identity~Racial and identity experience as central theme~以种族与身份经验为核心议题~Moonlight, Green Book|
+性别与性向~Gender & Sexuality~Gender and sexuality explored as core subject~探讨性别与性向议题~Carol, Pose|
+阶级与不平等~Class & Inequality~Class divide and inequality as dramatic conflict~以阶级差异与不平等为冲突核心~Parasite, Joker|
+心理健康~Mental Health~Mental illness and psychological struggle portrayed~呈现心理疾病与精神困境~A Beautiful Mind, BoJack Horseman|
+信仰与宗教~Faith & Religion~Religious belief and institutions as subject~以宗教信仰与机构为主题~The Chosen, Silence|
+科技与AI~Technology & AI~Technology or artificial intelligence shapes the story~以科技或人工智能影响故事走向~Ex Machina, Her|
+家庭关系~Family Dynamics~Family bonds and conflicts as dramatic core~以家庭纽带与矛盾为核心~This Is Us, Marriage Story|
+移民~Immigration~Immigrant experience and displacement as theme~以移民经历与漂泊为主题~Minari, The Namesake|
+真实事件改编~True Story~Based on real events and real people~改编自真实事件与真实人物~Schindler's List, Zodiac|
+反战~Anti-War~War critiqued from an anti-war perspective~以反战立场审视战争~All Quiet on the Western Front, Full Metal Jacket|
+环境~Environment~Environmental crisis and nature as subject~以环境危机与自然议题为主题~Wall-E, Cowspiracy
+`)]},
+{zh:'情绪与调性',en:'Mood & Tone',groups:[
+G('情绪感受','Feel','Feel','P1',`
+治愈/温暖~Feel-Good~Warm, uplifting emotional experience~温暖治愈、令人愉快的观感~Amélie, Paddington|
+暗黑~Dark~Bleak tone and pessimistic worldview~基调阴暗、世界观悲观~Se7en, True Detective|
+硬核~Gritty~Raw, unvarnished depiction of harsh reality~粗粝写实地呈现残酷现实~Sicario, The Wire|
+轻松~Lighthearted~Low-stakes, easy and pleasant viewing~轻松无负担的观看体验~Ted Lasso, The Office|
+刺激~Intense~High-stakes, high-adrenaline pacing~高张力、肾上腺素飙升的节奏~Mad Max Fury Road, Uncut Gems|
+催泪/感人~Emotional / Tearjerker~Emotionally overwhelming, tear-inducing~情感浓度高、催人泪下~Titanic, Manchester by the Sea|
+烧脑~Mind-Bending~Complex structure or concept requiring attention~结构或概念复杂、需高度投入思考~Inception, Tenet|
+细思极恐~Creepy / Unsettling~Unsettling atmosphere that lingers after viewing~余味不安、越想越怕的氛围~Get Out, Hereditary|
+讽刺~Satirical~Mockery of institutions or social norms~对社会规范与制度的讽刺~The Great, Don't Look Up|
+怀旧~Nostalgic~Evokes nostalgia for a past era~唤起对过往时代的怀念~Stranger Things, La La Land|
+励志~Inspiring~Motivating story of perseverance and triumph~关于坚持与胜利的激励故事~The Pursuit of Happyness, Rocky|
+怪诞/另类~Quirky / Offbeat~Eccentric characters and unconventional style~怪诞人物与非常规风格~The Lobster, The Grand Budapest Hotel|
+引人深思~Thought-Provoking~Raises questions that stay with the viewer~留下值得反复思考的问题~Arrival, Ex Machina|
+暴力/刺激~Violent / Visceral~Graphic violence as a core sensory experience~以直白血腥的暴力带来感官冲击~John Wick, The Raid
+`),
+G('节奏','Pacing','Pacing','P1',`
+快节奏~Fast-Paced~Rapid editing and continuous momentum~剪辑紧凑、持续推进的节奏~Mad Max Fury Road, Baby Driver|
+慢热~Slow-Burn~Gradual build with delayed payoff~缓慢铺垫、后段释放张力~Drive, There Will Be Blood|
+一口气看完~Binge-Worthy~Strong hook and cliffhangers sustain marathon viewing~强钩子与悬念支撑连续追看~Stranger Things, Money Heist
+`)]},
+{zh:'受众场景',en:'Audience',groups:[G('观影场景','Occasion','Occasion','P1',`
+家庭观影~Family~Suitable for watching with family of all ages~适合全年龄段家庭成员共同观看~Encanto, Coco|
+情侣约会~Couples~Romantic or date-appropriate viewing choice~适合恋爱关系中的约会观看~La La Land, Before Sunrise|
+闺蜜之夜~Girls' Night~Group viewing appeal for female friend gatherings~适合女性好友聚会观看~Bridgerton, Sex and the City|
+兄弟之夜~Guys' Night~Group viewing appeal for male friend gatherings~适合男性好友聚会观看~The Boys, Fast & Furious|
+独自观影~Solo Watch~Best experienced alone with full attention~适合独自专注观看~Manchester by the Sea, Nomadland|
+影迷向~Cinephile~Made for viewers with deep film literacy~面向具备电影素养的深度影迷~The Lighthouse, Mulholland Drive|
+轻度观众~Casual Viewer~Easy entry for casual, low-commitment viewing~面向低投入的轻度观众~Friends, The Big Bang Theory
+`)]},
+{zh:'场景设定',en:'Setting',groups:[
+G('时代','Time','Time','P1',`
+年代/历史~Period / Historical~Set in a recognizable past era~以可辨识的历史年代为背景~Downton Abbey, Peaky Blinders|
+当代~Contemporary~Set in the present day~以当代现实时间为背景~Friends, Normal People|
+未来~Futuristic~Set in a speculative future~以未来时空为设定~Blade Runner 2049, Dune|
+80-90年代~1980s-1990s~Set specifically in the 1980s or 1990s~以80至90年代为具体时代背景~Stranger Things, The Perks of Being a Wallflower
+`),
+G('场景/节日','Occasion / Festival','Occasion / Festival','P1',`
+圣诞节~Christmas~Christmas season as setting or backdrop~以圣诞节为背景或氛围~Home Alone, Love Actually|
+万圣节~Halloween~Halloween night as setting or theme~以万圣节为背景或主题~Halloween, Hocus Pocus|
+情人节~Valentine's Day~Valentine's Day as setting or release theme~以情人节为背景或主题~Valentine's Day, Bridget Jones's Diary|
+新年/跨年~New Year~New Year period as narrative backdrop~以新年或跨年为叙事背景~When Harry Met Sally|
+夏日~Summer~Summer season as setting and mood~以夏日为背景与氛围~Call Me by Your Name|
+感恩节~Thanksgiving~Thanksgiving gathering as setting~以感恩节聚会为背景~Planes, Trains and Automobiles|
+亡灵节~Día de los Muertos~Day of the Dead traditions as setting~以亡灵节传统为背景~Coco|
+斋月/开斋节~Ramadan / Eid~Ramadan or Eid context and customs~以斋月或开斋节为背景~Moon Knight|
+农历新年~Lunar New Year~Lunar New Year celebration as setting~以农历新年庆祝为背景~Crazy Rich Asians|
+排灯节~Diwali~Diwali celebration as setting~以排灯节为背景~Never Have I Ever|
+开学季~Back to School~School return season as theme~以开学季为主题~Mean Girls|
+公路旅行~Road Trip~Journey on the road as narrative structure~以公路旅行为叙事结构~Little Miss Sunshine|
+太空~Outer Space~Space missions and environments as setting~以太空任务与环境为设定~Interstellar, Gravity|
+海洋/水下~Ocean / Underwater~Ocean or underwater environments as setting~以海洋或水下环境为设定~The Meg, Blue Planet II
+`)]},
+{zh:'观影受众人群',en:'AudienceAgeBand',groups:[
+G('主要观影受众','primaryAudienceAgeBand','Primary Age Band','P1',`
+学龄前儿童~PRESCHOOL~Preschool children as primary audience~以学龄前儿童为主要受众~Peppa Pig, Cocomelon|
+低龄儿童~YOUNG_KIDS~Young children as primary audience~以低龄儿童为主要受众~Paw Patrol, Bluey|
+高龄儿童~OLDER_KIDS~Older children as primary audience~以高龄儿童为主要受众~Harry Potter, Percy Jackson|
+TEEN~青少年~Teens as primary audience~以青少年为主要受众~Euphoria, Heartstopper|
+年轻成人~YOUNG_ADULT~Young adults as primary audience~以年轻成人为主要受众~Friends, Normal People|
+大众成人~GENERAL_ADULT~General adult audience as primary target~以大众成人为主要受众~The Crown, Succession|
+家庭共同观看~FAMILY~Whole-family co-viewing as primary scenario~以家庭共同观看为主要场景~Encanto, Paddington|
+无法判断~UNKNOWN~Audience band cannot be determined~无法判断主要受众年龄段~
+`),
+G('次要观影受众','secondaryAudienceAgeBands','Secondary Age Band','P1',`
+低龄儿童~YOUNG_KIDS~Secondary appeal to young children~次要覆盖低龄儿童~Despicable Me|
+高龄儿童~OLDER_KIDS~Secondary appeal to older children~次要覆盖高龄儿童~Spider-Man|
+TEEN~青少年~Secondary appeal to teens~次要覆盖青少年~Stranger Things|
+年轻成人~YOUNG_ADULT~Secondary appeal to young adults~次要覆盖年轻成人~The Office|
+大众成人~GENERAL_ADULT~Secondary appeal to general adults~次要覆盖大众成人~Coco
+`)]}
+];
+/* ===== 索引 ===== */
+const nodes=new Map();let leaves=[];
+function index(){nodes.clear();leaves=[];roots.forEach((r,ri)=>{r.id='r'+ri;r.level=1;r.root=r;r.enabled=r.enabled!==false;nodes.set(r.id,r);(r.groups||[]).forEach((g,gi)=>{g.id=r.id+'g'+gi;g.level=2;g.root=r;g.enabled=g.enabled!==false;nodes.set(g.id,g);g.items.forEach((t,ti)=>{t.id=g.id+'t'+ti;t.level=3;t.root=r;t.group=g;t.enabled=t.enabled!==false;nodes.set(t.id,t);leaves.push(t);});});});}
+const $=id=>document.getElementById(id),esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+index();
+const kids=n=>n.groups||n.items||[];
+const ids=n=>kids(n).length?kids(n).flatMap(ids):(n.enabled===false?[]:[n.id]);
+const label=n=>`${esc(n.zh)} <span class="en">/ ${esc(n.en)}</span>`;
+const treeHost=$('tree-host');let selected=null,editing=false,creating=false;const opened=new Set(['r0','r0g0']),chosen=new Set();
+function matches(n,key){return (n.zh+' '+n.en).toLowerCase().includes(key);}
+function tree(){const key=$('search').value.trim().toLowerCase();function draw(n,parentMatch=false){const hit=parentMatch||matches(n,key);const children=kids(n);if(!children.length)return hit?`<button class="tree-entry${selected===n.id?' selected':''}" data-node="${n.id}"><span class="icon">♧ ♢</span><span>${esc(n.zh)}</span><span class="enabled${n.enabled===false?' off':''}">${n.enabled===false?'停用':'启用'}</span><span class="en">/ ${esc(n.en)}</span></button>`:'';const inner=children.map(c=>draw(c,hit)).join('');if(!inner)return '';return `<details data-folder="${n.id}" ${key||opened.has(n.id)?'open':''}><summary><span class="folder-name" data-node="${n.id}">▱ ${label(n)}${n.enabled===false?' <span class="enabled off">停用</span>':''}</span></summary><div class="hierarchy-branch">${inner}</div></details>`;}treeHost.innerHTML=roots.map(r=>draw(r)).join('')||'<div class="hint">暂无匹配标签</div>';treeHost.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{if(!$('search').value.trim()){d.open?opened.add(d.dataset.folder):opened.delete(d.dataset.folder);}}));}
+
+/* ===== 节点配置：字段定义对齐「节点配置」界面 ===== */
+const LEVEL={1:'一级字典值',2:'二级字典值',3:'三级字典值'};
+const parentOf=n=>n.level===1?null:n.level===2?n.root:n.group;
+const parentText=n=>{if(!n)return '—';const p=n.level===2?n.root:n.group;if(!p)return '—';return p.zh;};
+const parentFull=n=>{if(!n)return '';const p=n.level===2?n.root:n.group;if(!p)return '';return `${p.zh} / ${p.en}`;};
+function field(id,labelText,value,opts={}){const req=opts.req?'<i>*</i>':'';const ph=opts.ph||'';let ctl;
+if(opts.type==='textarea')ctl=`<textarea id="${id}" ${opts.disabled?'disabled':''} placeholder="${esc(ph)}">${esc(value)}</textarea>`;
+else if(opts.type==='select')ctl=`<select id="${id}" ${opts.disabled?'disabled':''}>${opts.options.map(([v,t])=>`<option value="${esc(v)}"${v===value?' selected':''}>${esc(t)}</option>`).join('')}</select>`;
+else ctl=`<input id="${id}" type="text" ${opts.disabled?'disabled':''} placeholder="${esc(ph)}" value="${esc(value)}">`;
+return `<div class="fitem ${opts.cls||''}"${opts.title?` title="${esc(opts.title)}"`:''}><label class="flabel" for="${id}">${req}${labelText}</label>${ctl}</div>`;}
+function detailHTML(n){
+  if(creating)return `<div class="node-config" id="node-config">
+    <div class="section-title">新建一级维度</div>
+    ${field('f-zh','节点名称（中文）','', {req:1,ph:'请输入节点名称'})}
+    ${field('f-en','节点名称（英文）','', {req:1,ph:'Please enter node name'})}
+    ${field('f-level','节点层级','一级字典值',{disabled:1})}
+    ${field('f-parent','归属父节点','—',{disabled:1})}
+    <div class="fitem"><label class="flabel">启用状态</label><label class="switch"><input type="checkbox" id="f-enabled" checked><span class="track"></span><span class="switch-text">启用</span></label></div>
+    <div class="form-foot"><button type="button" id="cancel-btn">取消</button><button type="button" class="primary" id="save-btn">保存</button></div>
+  </div>`;
+  const leaf=n.level===3;
+  const dis=!editing?'disabled':'';
+  return `<div class="node-config" id="node-config">
+    ${field('f-zh','节点名称（中文）',n.zh,{req:1,disabled:!editing,ph:'请输入节点名称'})}
+    ${field('f-en','节点名称（英文）',n.en,{req:1,disabled:!editing,ph:'Please enter node name'})}
+    ${field('f-level','节点层级',LEVEL[n.level],{disabled:1})}
+    ${field('f-parent','归属父节点',parentText(n),{req:1,disabled:1,type:'select',options:[[parentText(n),parentText(n)]],title:parentFull(n)})}
+    <div class="fitem"><label class="flabel">启用状态</label><label class="switch"><input type="checkbox" id="f-enabled" ${n.enabled!==false?'checked':''} ${dis}><span class="track"></span><span class="switch-text">${n.enabled!==false?'启用':'停用'}</span></label></div>
+    ${leaf?field('f-def-zh','标签释义',n.defZh||'',{type:'textarea',disabled:!editing,ph:'用于内部运营团队统一该标签的定义标准（选填）'}):
+           `<div class="fitem"><label class="flabel">标签释义</label><textarea disabled placeholder="一级 / 二级节点用于分组，标签释义在三级标签上维护">该节点为分组节点，含 ${kids(n).length} 个下级节点</textarea></div>`}
+    ${leaf?`<div class="section-title">导出字段（生成「标准标签」导出表时使用）</div>
+    ${field('f-def-en','定义（英文）Definition',n.defEn||'',{type:'textarea',disabled:!editing,ph:'English definition aligned with 定义(EN) column'})}
+    ${field('f-ex','示例作品 Examples',n.ex||'',{disabled:!editing,ph:'如：The Lord of the Rings, Narnia'})}
+    <div class="fgrid2">
+      ${field('f-pri','优先级 Priority',n.pri||(n.group&&n.group.pri)||'P1',{type:'select',disabled:!editing,options:[['P0','P0'],['P1','P1'],['P2','P2']]})}
+      ${field('f-note','版本标记 Version Note',n.note||'',{disabled:!editing,ph:'如：v1.2 新增'})}
+    </div>`:''}
+    <div class="form-foot"><button type="button" id="cancel-btn" ${editing?'':'disabled'}>取消</button><button type="button" class="primary" id="save-btn" ${editing?'':'disabled'}>保存</button></div>
+  </div>`;
+}
+function bindDetail(){
+  const en=$('f-enabled');if(en)en.onchange=()=>{const t=document.querySelector('.switch-text');if(t)t.textContent=en.checked?'启用':'停用';};
+  const c=$('cancel-btn'),s=$('save-btn');
+  if(c)c.onclick=()=>{if(creating){creating=false;if(selected)showNode(selected);else emptyDetail();}else{editing=false;showNode(selected);} };
+  if(s)s.onclick=save;
+}
+function emptyDetail(){$('detail').className='detail';$('detail').innerHTML='<div class="empty"><div class="empty-icon">▱</div>请在左侧选中一个节点或点击新建</div>';$('edit-btn').disabled=true;selected=null;}
+function showNode(id){selected=id;const n=nodes.get(id);if(!n)return;editing=false;creating=false;$('detail').className='detail has-node';$('detail').innerHTML=detailHTML(n);bindDetail();$('edit-btn').disabled=false;
+treeHost.querySelectorAll('.tree-entry').forEach(el=>el.classList.toggle('selected',el.dataset.node===id));}
+function save(){
+  const zh=$('f-zh').value.trim(),en=$('f-en').value.trim();
+  if(!zh||!en){toast('请填写节点名称（中文）和节点名称（英文）');return;}
+  if(creating){roots.push({zh,en,groups:[],enabled:$('f-enabled').checked});index();creating=false;selected=null;tree();emptyDetail();toast('已新建一级维度：'+zh);return;}
+  const n=nodes.get(selected);n.zh=zh;n.en=en;n.enabled=$('f-enabled').checked;
+  if(n.level===3){n.defZh=$('f-def-zh').value.trim();n.defEn=$('f-def-en').value.trim();n.ex=$('f-ex').value.trim();n.pri=$('f-pri').value;n.note=$('f-note').value.trim();}
+  editing=false;tree();showNode(selected);toast('节点配置已保存');
+}
+$('edit-btn').onclick=()=>{if(!selected)return;editing=true;$('detail').innerHTML=detailHTML(nodes.get(selected));bindDetail();};
+$('create').onclick=()=>{creating=true;selected=null;editing=true;$('edit-btn').disabled=true;$('detail').className='detail has-node';$('detail').innerHTML=detailHTML(null);bindDetail();treeHost.querySelectorAll('.tree-entry').forEach(el=>el.classList.remove('selected'));};
+treeHost.addEventListener('click',e=>{const n=e.target.closest('[data-node]');if(n)showNode(n.dataset.node);});$('search').oninput=tree;
+
+/* ===== 导出模板定义：9 列，与标准标签模板一致 ===== */
+const HEADER=['维度 Dimension','子类 Subcategory','标签(EN) Tag','标签(CN) 中文','定义(EN) Definition','定义(CN) 中文定义','示例作品 Examples','优先级 Priority','版本标记 Version Note'];
+function rowOf(t){const g=t.group,r=t.root;return [`${r.en} ${r.zh}`,`${g.code||g.en} ${g.zh}`,t.en,t.zh,t.defEn||'',t.defZh||'',t.ex||'',t.pri||g.pri||'P1',t.note||''];}
+const dialog=$('export-dialog');
+function choiceMarkup(n){const children=kids(n);const off=n.enabled===false;const check=`<label class="${off?'off':''}"><input type="checkbox" data-choice="${n.id}" ${off?'disabled':''}><span>${label(n)}</span></label>`;return children.length?`<details ${n.level<3?'open':''}><summary>${check}<small>${ids(n).length} 项</small></summary><div class="export-branch">${children.map(choiceMarkup).join('')}</div></details>`:`<div class="export-leaf">${check}</div>`;}
+$('choices').innerHTML=roots.map(choiceMarkup).join('')||'<div class="hint">暂无可导出的标签</div>';
+const exportable=()=>leaves.filter(t=>t.enabled!==false);
+function renderPreview(){
+  const rows=leaves.filter(t=>chosen.has(t.id)).slice(0,3).map(rowOf);
+  const host=$('preview-wrap');
+  if(!rows.length){host.innerHTML='<div class="preview-empty">勾选标签后可预览导出表的前 3 行内容</div>';return;}
+  host.innerHTML=`<table class="preview"><thead><tr>${HEADER.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)||'<span style="color:#d0d4da">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+function sync(){const total=exportable().length,count=chosen.size;
+  $('count').textContent=`已选 ${count} / ${total} 个标签`;
+  $('select-all').checked=total>0&&count===total;$('select-all').indeterminate=count>0&&count<total;
+  $('download').disabled=!count;$('download').textContent=count?`导出所选标签（${count}）`:'导出所选标签';
+  $('choices').querySelectorAll('[data-choice]').forEach(box=>{const list=ids(nodes.get(box.dataset.choice)),n=list.filter(id=>chosen.has(id)).length;box.checked=list.length>0&&n===list.length;box.indeterminate=n>0&&n<list.length;});
+  renderPreview();}
+$('choices').addEventListener('click',e=>{if(e.target.closest('label'))e.stopPropagation();});
+$('choices').onchange=e=>{if(!e.target.matches('[data-choice]'))return;ids(nodes.get(e.target.dataset.choice)).forEach(id=>e.target.checked?chosen.add(id):chosen.delete(id));sync();};
+$('select-all').onchange=e=>{chosen.clear();if(e.target.checked)exportable().forEach(t=>chosen.add(t.id));sync();};
+$('export').onclick=()=>{if(!chosen.size&&selected)ids(nodes.get(selected)).forEach(id=>chosen.add(id));sync();dialog.showModal();};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>dialog.close());
+let timer;function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(timer);timer=setTimeout(()=>$('toast').hidden=true,4000);}
+
+/* ===== XLSX WRITER START (纯函数，无 DOM 依赖) ===== */
+const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(buf){let c=0xFFFFFFFF;for(let i=0;i<buf.length;i++)c=CRC_TABLE[(c^buf[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files){
+  const enc=new TextEncoder(),parts=[],central=[];let offset=0;
+  const now=new Date();
+  const dosTime=((now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1))&0xFFFF;
+  const dosDate=(((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate())&0xFFFF;
+  files.forEach(f=>{
+    const name=enc.encode(f.name);
+    const data=typeof f.data==='string'?enc.encode(f.data):f.data;
+    const crc=crc32(data);
+    const lh=new Uint8Array(30+name.length),lv=new DataView(lh.buffer);
+    lv.setUint32(0,0x04034b50,true);lv.setUint16(4,20,true);lv.setUint16(6,0x0800,true);lv.setUint16(8,0,true);
+    lv.setUint16(10,dosTime,true);lv.setUint16(12,dosDate,true);lv.setUint32(14,crc,true);
+    lv.setUint32(18,data.length,true);lv.setUint32(22,data.length,true);lv.setUint16(26,name.length,true);lv.setUint16(28,0,true);
+    lh.set(name,30);parts.push(lh,data);
+    const cd=new Uint8Array(46+name.length),cv=new DataView(cd.buffer);
+    cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint16(8,0x0800,true);cv.setUint16(10,0,true);
+    cv.setUint16(12,dosTime,true);cv.setUint16(14,dosDate,true);cv.setUint32(16,crc,true);
+    cv.setUint32(20,data.length,true);cv.setUint32(24,data.length,true);cv.setUint16(28,name.length,true);
+    cv.setUint16(30,0,true);cv.setUint16(32,0,true);cv.setUint16(34,0,true);cv.setUint16(36,0,true);cv.setUint32(38,0,true);cv.setUint32(42,offset,true);
+    cd.set(name,46);central.push(cd);offset+=lh.length+data.length;
+  });
+  const cdSize=central.reduce((a,b)=>a+b.length,0);
+  const eocd=new Uint8Array(22),ev=new DataView(eocd.buffer);
+  ev.setUint32(0,0x06054b50,true);ev.setUint16(4,0,true);ev.setUint16(6,0,true);ev.setUint16(8,files.length,true);ev.setUint16(10,files.length,true);
+  ev.setUint32(12,cdSize,true);ev.setUint32(16,offset,true);ev.setUint16(20,0,true);
+  const all=parts.concat(central,[eocd]);
+  const total=all.reduce((a,b)=>a+b.length,0),out=new Uint8Array(total);let p=0;
+  all.forEach(a=>{out.set(a,p);p+=a.length;});
+  return out;
+}
+function xmlEsc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');}
+function colName(i){let s='';i+=1;while(i>0){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26);}return s;}
+function buildXlsx(header,rows){
+  const widths=[16,20,26,18,50,40,38,10,20];
+  const cols=widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('');
+  const head=`<row r="1" ht="26" customHeight="1">${header.map((h,i)=>`<c r="${colName(i)}1" s="1" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(h)}</t></is></c>`).join('')}</row>`;
+  const body=rows.map((r,ri)=>{const n=ri+2;return `<row r="${n}">`+header.map((_,ci)=>{const v=r[ci]==null?'':r[ci];const st=ci===7?3:2;return `<c r="${colName(ci)}${n}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(v)}</t></is></c>`;}).join('')+'</row>';}).join('');
+  const last=rows.length+1;
+  const sheet=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="17"/><cols>${cols}</cols><sheetData>${head}${body}</sheetData><autoFilter ref="A1:${colName(header.length-1)}${last}"/></worksheet>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="3"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Arial"/></font><font><sz val="10"/><color rgb="FF333333"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF4F81BD"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD9D9D9"/></left><right style="thin"><color rgb="FFD9D9D9"/></right><top style="thin"><color rgb="FFD9D9D9"/></top><bottom style="thin"><color rgb="FFD9D9D9"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="4"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const workbook=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="标签导出" sheetId="1" r:id="rId1"/></sheets></workbook>`;
+  const wbRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`;
+  const types=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`;
+  return zipStore([
+    {name:'[Content_Types].xml',data:types},
+    {name:'_rels/.rels',data:rels},
+    {name:'xl/workbook.xml',data:workbook},
+    {name:'xl/_rels/workbook.xml.rels',data:wbRels},
+    {name:'xl/worksheets/sheet1.xml',data:sheet},
+    {name:'xl/styles.xml',data:styles}
+  ]);
+}
+/* ===== XLSX WRITER END ===== */
+
+function makeCSV(rows){return '\uFEFF'+[HEADER,...rows].map(row=>row.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(',')).join('\r\n');}
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('download').onclick=()=>{
+  if(!chosen.size)return;
+  const list=leaves.filter(t=>chosen.has(t.id)),rows=list.map(rowOf);
+  const fmt=document.querySelector('input[name=fmt]:checked').value;
+  const day=new Date().toISOString().slice(0,10);
+  if(fmt==='xlsx'){
+    const bytes=buildXlsx(HEADER,rows);
+    download(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),`标准标签_${day}.xlsx`);
+  }else{
+    download(new Blob([makeCSV(rows)],{type:'text/csv;charset=utf-8;'}),`标准标签_${day}.csv`);
+  }
+  dialog.close();toast(`已导出 ${rows.length} 个标签`);
+};
+tree();sync();
+})();
+</script></body></html>
